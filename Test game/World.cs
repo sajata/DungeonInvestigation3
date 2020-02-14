@@ -65,8 +65,18 @@ namespace Test_game
                 case "cellauto":
                     CellAutoGenerator MapGen2 = new CellAutoGenerator();
                     MapGen2.Seed = MapSeed;
-                    CurrentMap = MapGen2.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
-                   
+                    CurrentMap = MapGen2.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);                   
+                    break;
+                case "bsp":
+                    BSPGenerator MapGen3 = new BSPGenerator();
+                    MapGen3.Seed = MapSeed;
+                    CurrentMap = MapGen3.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
+                    break;
+                case "messbsp":
+                    MessyBSPGenerator MapGen4 = new MessyBSPGenerator();
+                    MapGen4.Seed = MapSeed;
+                    CurrentMap = MapGen4.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
+                    
                     break;
                 default:
                     TestMapGenerator MapGen0 = new TestMapGenerator();
@@ -96,6 +106,11 @@ namespace Test_game
                     BSPGenerator MapGen3 = new BSPGenerator();
                     CurrentMap = MapGen3.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
                     Seed = MapGen3.Seed;
+                    break;
+                case "messbsp":
+                    MessyBSPGenerator MapGen4 = new MessyBSPGenerator();
+                    CurrentMap = MapGen4.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
+                    Seed = MapGen4.Seed;
                     break;
                 default:
                     TestMapGenerator MapGen0 = new TestMapGenerator();

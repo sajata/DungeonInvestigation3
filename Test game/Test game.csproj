@@ -60,6 +60,8 @@
     <Compile Include="Menu%27s\MapSelectMenu.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="MessageLog.cs" />
+    <Compile Include="MessyBSPGenerator.cs" />
+    <Compile Include="MessyBSPNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMapGenerator.cs" />
     <Compile Include="Tiles\BaseTile.cs" />
@@ -97,6 +99,7 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

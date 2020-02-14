@@ -7,7 +7,9 @@ using Test_game.Tiles;
 
 namespace Test_game
 {
-    public class BSPGenerator
+
+
+    public class MessyBSPGenerator
     {
         private Map _map;
         public int Seed;
@@ -17,8 +19,8 @@ namespace Test_game
             int MaxLeafSize = maxRoomSize + 5;
             int MinLeafSize = minRoomSize;
             bool splitSuccesfuly = true;
-            List<BSPNode> Nodes = new List<BSPNode>();
-            BSPNode Root = new BSPNode(new Rectangle(0, 0, mapWidth - 1, mapHeight - 1));
+            List<MessyBSPNode> Nodes = new List<MessyBSPNode>();
+            MessyBSPNode Root = new MessyBSPNode(new Rectangle(0, 0, mapWidth - 1, mapHeight - 1));
             Nodes.Add(Root);
             if (Seed == 0)
             {
@@ -34,7 +36,7 @@ namespace Test_game
             while (splitSuccesfuly)
             {
                 splitSuccesfuly = false;
-                foreach(BSPNode node in Nodes)
+                foreach (MessyBSPNode node in Nodes)
                 {
                     if (node.IAmLeaf())
                     {
@@ -50,56 +52,56 @@ namespace Test_game
                         }
                     }
                 }
-                
+
             }
 
             DrawRooms(ref Root, ref r, minRoomSize);
 
-            //DrawHalls(Nodes);
+            DrawHalls(Nodes);
 
             return _map;
         }
 
-        private void DrawHalls(List<BSPNode> Nodes)
+        private void DrawHalls(List<MessyBSPNode> Nodes)
         {
-            foreach(BSPNode node in Nodes)
+            foreach (MessyBSPNode node in Nodes)
             {
                 if (node.Halls.Count > 0)
                 {
-                    for(int i = 0; i < node.Halls.Count(); i++)
+                    for (int i = 0; i < node.Halls.Count(); i++)
                     {
-                        CreateHall(node.Halls[i]);
+                        CreateFloor(node.Halls[i]);
                     }
                 }
             }
-            
+
         }
 
-        private void DrawRooms(ref BSPNode root, ref Random r, int MinRoomSize)
+        private void DrawRooms(ref MessyBSPNode root, ref Random r, int MinRoomSize)
         {
-            if(root.Left != null)
+            if (root.Left != null)
             {
                 DrawRooms(ref root.Left, ref r, MinRoomSize);
-               
+
             }
-            if(root.Right != null)
+            if (root.Right != null)
             {
-                 DrawRooms(ref root.Right, ref r, MinRoomSize);
+                DrawRooms(ref root.Right, ref r, MinRoomSize);
             }
-            if(root.Left != null && root.Right != null)
+            if (root.Left != null && root.Right != null)
             {
-                //root.createHall(root.Left.getRoom(ref r), root.Right.getRoom(ref r), ref r);
+               root.createHall(root.Left.getRoom(ref r), root.Right.getRoom(ref r), ref r, _map.Width, _map.Height);
             }
             else
             {
-                //root.MakeRoom(ref r, MinRoomSize);
-                CreateRoom(root.Leaf);
+                root.MakeRoom(ref r, MinRoomSize);
+                CreateRoom(root.Room);
             }
         }
 
         private void CreateHall(Rectangle hall)
         {
-            
+
             for (int x = hall.Left; x < hall.Right; x++)
             {
                 for (int y = hall.Top; y < hall.Bottom; y++)
@@ -132,6 +134,5 @@ namespace Test_game
                 _map.Tiles[i] = new WallTile();
             }
         }
-
     }
 }

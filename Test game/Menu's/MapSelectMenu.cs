@@ -62,16 +62,16 @@ namespace Test_game
                 TextAlignment = HorizontalAlignment.Center,
                 Name = "MazeWithRooms"
             };
-            Button RoomAddition = new Button(ButtonWidth+3, ButtonHeight)
+            Button MessyBSP = new Button(ButtonWidth+3, ButtonHeight)
             {
                 Position = new Point(23, 10),
-                Text = "Room Addition",
+                Text = "Messy BSP",
                 TextAlignment = HorizontalAlignment.Center,
-                Name = "RooomAddition"
+                Name = "MessyBSP"
             };
 
             this.Controls.Add(BackButton);
-            this.Controls.Add(RoomAddition);
+            this.Controls.Add(MessyBSP);
             this.Controls.Add(CityBlocks);
             this.Controls.Add(Tunneling);
             this.Controls.Add(BSP);
@@ -137,9 +137,9 @@ namespace Test_game
                 Parent.Children[3].IsVisible = true;
             };
 
-            RoomAddition.Click += (s, e) =>
+            MessyBSP.Click += (s, e) =>
             {
-                GameLoop.World.MapGenType = "";
+                GameLoop.World.MapGenType = "messbsp";
                 GameLoop.World.CreateMap();
                 GameLoop.MenuManager.PreviewMenu.CreateMap();
                 this.IsVisible = false;
