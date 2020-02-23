@@ -15,13 +15,13 @@ namespace Test_game
         public Map GenerateMap(int mapWidth, int mapHeight, int maxRooms, int minRoomSize, int maxRoomSize)
         {
             int MaxLeafSize = maxRoomSize + 5;
-            int MinLeafSize = minRoomSize;
+            int MinLeafSize = minRoomSize + 5;
             bool splitSuccesfuly = true;
             List<BSPNode> Nodes = new List<BSPNode>();
             BSPNode Root = new BSPNode(new Rectangle(0, 0, mapWidth - 1, mapHeight - 1));
             Nodes.Add(Root);
             if (Seed == 0)
-            {
+            { 
                 Random SeedGen = new Random();
                 Seed = SeedGen.Next();
             }
@@ -34,30 +34,41 @@ namespace Test_game
             while (splitSuccesfuly)
             {
                 splitSuccesfuly = false;
+                
                 foreach(BSPNode node in Nodes)
                 {
-                    if (node.IAmLeaf())
+                    if(GetNumberOfLeafs(Nodes) < maxRooms)
                     {
-                        if (node.Leaf.Width > MaxLeafSize && node.Leaf.Height > MaxLeafSize)
+                        if(node.Partition(ref r, MinLeafSize))
                         {
-                            if (node.Partition(ref r, MinLeafSize))
-                            {
-                                splitSuccesfuly = true;
-                                Nodes.Add(node.Left);
-                                Nodes.Add(node.Right);
-                                break;
-                            }
+                            Nodes.Add(node.Left);
+                            Nodes.Add(node.Right);
+                            splitSuccesfuly = true;
+                            break;
                         }
                     }
                 }
-                
             }
 
             DrawRooms(ref Root, ref r, minRoomSize);
 
-            //DrawHalls(Nodes);
+            DrawHalls(Nodes);
 
             return _map;
+        }
+
+        private int GetNumberOfLeafs(List<BSPNode> Nodes)
+        {
+            int NumberLeafs = 0;
+
+            foreach(BSPNode node in Nodes)
+            {
+                if(node.IAmLeaf())
+                {
+                    NumberLeafs++;
+                }
+            }
+            return NumberLeafs;
         }
 
         private void DrawHalls(List<BSPNode> Nodes)
@@ -88,12 +99,12 @@ namespace Test_game
             }
             if(root.Left != null && root.Right != null)
             {
-                //root.createHall(root.Left.getRoom(ref r), root.Right.getRoom(ref r), ref r);
+                root.createHall(root.Left.getRoom(ref r), root.Right.getRoom(ref r), ref r);
             }
             else
             {
-                //root.MakeRoom(ref r, MinRoomSize);
-                CreateRoom(root.Leaf);
+                root.MakeRoom(ref r, MinRoomSize);
+                CreateRoom(root.Room);
             }
         }
 

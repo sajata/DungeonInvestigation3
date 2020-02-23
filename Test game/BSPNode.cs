@@ -25,20 +25,19 @@ namespace Test_game
         public bool Partition(ref Random r, int MinLeafSize)
         {         
             int MaxSplit = 0;
-            int Split = 0;
+            int Split = 0;            
             HorizontalSplit = true;
+
             if(Left != null || Right != null)
             {
                 return false;
             }
-            if(this.Leaf.Width / this.Leaf.Height >= 1.25)
+
+            if (this.Leaf.Width / this.Leaf.Height >= 1.65)
             {
-                HorizontalSplit = false;   
-            }
-            else if (this.Leaf.Height / this.Leaf.Width >= 1.25)
-            {
-                HorizontalSplit = true;
-            }
+                HorizontalSplit = false;
+            }            
+
             else
             {
                 if (r.Next(0, 2) == 1)

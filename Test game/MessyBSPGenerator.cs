@@ -40,7 +40,7 @@ namespace Test_game
                 {
                     if (node.IAmLeaf())
                     {
-                        if (node.Leaf.Width > MaxLeafSize && node.Leaf.Height > MaxLeafSize)
+                        if (GetNumberOfLeafs(Nodes) < maxRooms)
                         {
                             if (node.Partition(ref r, MinLeafSize))
                             {
@@ -61,6 +61,21 @@ namespace Test_game
 
             return _map;
         }
+
+        private int GetNumberOfLeafs(List<MessyBSPNode> Nodes)
+        {
+            int NumberLeafs = 0;
+
+            foreach (MessyBSPNode node in Nodes)
+            {
+                if (node.IAmLeaf())
+                {
+                    NumberLeafs++;
+                }
+            }
+            return NumberLeafs;
+        }
+
 
         private void DrawHalls(List<MessyBSPNode> Nodes)
         {

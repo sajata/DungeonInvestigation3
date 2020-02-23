@@ -34,7 +34,27 @@ namespace Test_game
                 GenerateCaves();
             }
 
+            ConnectCaves();
+
             return _map;
+        }
+
+        private void ConnectCaves()
+        {
+            for(int x =1; x < _map.Width - 1; x++)
+            {
+                for(int y = 1; y < _map.Height - 1; y++)
+                {
+                    if(y % 37 == 0)
+                    {
+                        CreateFloor(new Point(x, y));
+                    }
+                    if(x % 12 == 0)
+                    {
+                        CreateFloor(new Point(x, y));
+                    }
+                }
+            }
         }
 
         private void RandomFillWalls(ref Random r)
