@@ -7,7 +7,7 @@ namespace Test_game
 {
     //A scrollable window which displays messsages
     // using a FIFO queue
-    public class MessageLog : Window
+    public class ListTextBox : Window
     {
         private static readonly int _maxLines = 100;
 
@@ -32,7 +32,7 @@ namespace Test_game
         //Create a new window with a centred title
         //And can be dragged around
 
-        public MessageLog(int width, int height, string title) : base(width, height)
+        public ListTextBox(int width, int height, string title) : base(width, height)
         {
             Theme.WindowTheme.FillStyle.IsVisible = true;
             Theme.WindowTheme.FillStyle.Background = Color.Gray;
@@ -66,11 +66,7 @@ namespace Test_game
             Children.Add(_messageConsole);
         }
 
-        //Tells SadCOnsole to draw this window
-        public override void Draw(TimeSpan drawTime)
-        {
-            base.Draw(drawTime);
-        }
+        
 
         //Custom Update method which allows for a vertical scrollbar
         //To be honest i dont understand most of the stuff here very well
@@ -89,6 +85,7 @@ namespace Test_game
                 if (_scrollBarCurrentPosition < _messageConsole.Height - _messageConsole.ViewPort.Height)
                 {
                     // Record how much we've scrolled to enable how far back the bar can see
+                    //this is effectively a shortened if else statement
                     _scrollBarCurrentPosition += _messageConsole.TimesShiftedUp != 0 ? _messageConsole.TimesShiftedUp : 1;
                 }
                 // Determines the scrollbar's max vertical position

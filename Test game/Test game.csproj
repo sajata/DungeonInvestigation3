@@ -50,6 +50,7 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Monster.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="MapNamer.cs" />
     <Compile Include="Menu%27s\BaseMenu.cs" />
     <Compile Include="GameLoop.cs" />
     <Compile Include="GameUIManager.cs" />
@@ -59,10 +60,11 @@
     <Compile Include="Menu%27s\MapPreviewMenu.cs" />
     <Compile Include="Menu%27s\MapSelectMenu.cs" />
     <Compile Include="MenuManager.cs" />
-    <Compile Include="MessageLog.cs" />
+    <Compile Include="ListTextBox.cs" />
     <Compile Include="MessyBSPGenerator.cs" />
     <Compile Include="MessyBSPNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavedMapsWindow.cs" />
     <Compile Include="TestMapGenerator.cs" />
     <Compile Include="Tiles\BaseTile.cs" />
     <Compile Include="Tiles\FloorTile.cs" />

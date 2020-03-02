@@ -8,9 +8,13 @@ namespace Test_game
 {
     public class MenuManager : ContainerConsole
     {
-        public MainMenu MainMenu;
-        public MapSelectMenu MapSelectMenu;
-        public LoadMenu LoadMenu;
+        
+        private MainMenu MainMenu;
+        private MapSelectMenu MapSelectMenu;
+        private LoadMenu LoadMenu;
+
+        //MapPreviewMenu is et to public because its CreateMap() function needs to be accessed directly 
+        //by MapSelectMenu and LoadMenu
         public MapPreviewMenu PreviewMenu;
 
         public MenuManager()
@@ -18,17 +22,20 @@ namespace Test_game
             IsVisible = true; // tells SadConsole screen to process this object
             IsFocused = true; // tells SadConsole to listen for keyboard and mouse input
 
-            //Tells SadConsole that UIManager
+            //Tells SadConsole that MenuManages
             //is the only screen that it processes
             //and to actively process it
             Parent = SadConsole.Global.CurrentScreen;
         }
         public void Init()
         {
-            CreateMenus();
-                        
+            CreateMenus();                        
         }
                
+        /// <summary>
+        /// Creates the menus with and adds them to the container console MenuManager
+        /// Except the GameUIManager
+        /// </summary>
         private void CreateMenus()
         {
             //INDEX OF MENUS
@@ -37,6 +44,7 @@ namespace Test_game
             //[2] = > Load Map Menu
             //[3] = > Map Preview 
 
+            //
             MainMenu = new MainMenu(GameLoop.GameWidth, GameLoop.GameHeight, 20, 15, Color.Navy, "Main Menu");
             Children.Add(MainMenu);
 

@@ -41,11 +41,11 @@ namespace Test_game
 
         private void ConnectCaves()
         {
-            for(int x =1; x < _map.Width - 1; x++)
+            for(int x =5; x < _map.Width - 1; x++)
             {
-                for(int y = 1; y < _map.Height - 1; y++)
+                for(int y = 5; y < _map.Height - 1; y++)
                 {
-                    if(y % 37 == 0)
+                    if(y % 18 == 0)
                     {
                         CreateFloor(new Point(x, y));
                     }

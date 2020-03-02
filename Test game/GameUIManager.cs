@@ -15,11 +15,11 @@ namespace Test_game
     {
         public ScrollingConsole MapConsole;// contains the console to store the Map data
         public Window MapWindow; // window to contain the MapConsole which contains the game map
-        public MessageLog MessageLogWindow;
+        public ListTextBox MessageLogWindow;
         public ControlsConsole Controls;
-        //private List<int> MapSeeds = new List<int>();
-        //private List<string> MapGenTypes = new List<string>();
-
+        private MapNamer MapNamer;
+        public string MapName;
+        private bool DisableMovement = false;
         public void Init()
         {
             IsVisible = true;
@@ -34,15 +34,13 @@ namespace Test_game
 
             //Crates the map window
             CreateMapWindow(60, 30, "Map");
-            UseMouse = true;
-
-           
-
-            
-
+            UseMouse = true;                        
             
             CreateControls();
 
+            MapNamer = new MapNamer(40, 20);
+            MapNamer.Position = new Point(70, 1);
+            MapNamer.Parent = this;           
             //Sets the camera on the player when the game starts
             CenterOnActor(GameLoop.World.Player);
         }
@@ -93,9 +91,18 @@ namespace Test_game
 
             SaveMapButton.Click += (s, e) =>
             {
-                SaveMap();
+                DisableMovement = true;
+                MapWindow.IsFocused = false;
+                MapConsole.IsFocused = false;
+                MapConsole.UseKeyboard = false;
+                MapWindow.UseKeyboard = false;
+
                 
-                SadConsole.Game.Instance.Exit();
+                MapNamer.IsVisible = true;
+                MapNamer.IsFocused = true;
+                MapNamer.Controls.IsFocused = true;
+                MapNamer.Controls.IsExclusiveMouse = true;
+                
             };
 
            
@@ -103,18 +110,19 @@ namespace Test_game
             Children.Add(Controls);
         }
 
-        private void SaveMap()
+        public void SaveMap()
         {
             GameLoop.sw = File.AppendText("MapSeeds.txt");
             GameLoop.swMapType = File.AppendText("MapGenTypes.txt");
-
+            GameLoop.swMapName = File.AppendText("MapNames.txt");
             
             GameLoop.sw.WriteLine(GameLoop.World.Seed);
             GameLoop.swMapType.WriteLine(GameLoop.World.MapGenType);
-
+            GameLoop.swMapName.WriteLine(MapName);
             
             GameLoop.sw.Close();
             GameLoop.swMapType.Close();
+            GameLoop.swMapName.Close();
         }
 
         //Loads the map into the console
@@ -224,33 +232,37 @@ namespace Test_game
         // based on the button pressed.
         private void CheckKeyboard()
         {
-            //When W is pressed moves actor by +1 along Y-axis
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W))
+            //movement only is disable whil the user is entering the map name in order to save it
+            if(!DisableMovement)
             {
-                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, -1));
-                CenterOnActor(GameLoop.World.Player);
-            }
-            //When S is pressed moves actor by -1 along Y-axis
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S))
-            {
-                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, 1));
-                CenterOnActor(GameLoop.World.Player);
+                //When W is pressed moves actor by +1 along Y-axis
+                if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W))
+                {
+                    GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, -1));
+                    CenterOnActor(GameLoop.World.Player);
+                }
+                //When S is pressed moves actor by -1 along Y-axis
+                if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S))
+                {
+                    GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, 1));
+                    CenterOnActor(GameLoop.World.Player);
 
-            }
-            //When A is pressed moves actor by -1 along X-axis
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A))
-            {
-                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(-1, 0));
-                CenterOnActor(GameLoop.World.Player);
+                }
+                //When A is pressed moves actor by -1 along X-axis
+                if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A))
+                {
+                    GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(-1, 0));
+                    CenterOnActor(GameLoop.World.Player);
 
-            }
-            //When D is pressed moves actor by +1 along X-axis
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D))
-            {
-                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(1, 0));
-                CenterOnActor(GameLoop.World.Player);
+                }
+                //When D is pressed moves actor by +1 along X-axis
+                if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D))
+                {
+                    GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(1, 0));
+                    CenterOnActor(GameLoop.World.Player);
 
-            }
+                }
+            }           
         }
 
         // centers the viewport camera on an Actor
@@ -269,10 +281,52 @@ namespace Test_game
         public void CreateMessageLogWindow(int width, int height, string title)
         {
             //Initialising MessageLog
-            MessageLogWindow = new MessageLog(width, height, title);
+            MessageLogWindow = new ListTextBox(width, height, title);
             Children.Add(MessageLogWindow);
             MessageLogWindow.Show();
             MessageLogWindow.Position = new Point(GameLoop.GameWidth - width, GameLoop.GameHeight / 2);
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("Hello world");
+            MessageLogWindow.Add("TESTING");
+            MessageLogWindow.Add("TESTING");
             MessageLogWindow.Add("Hello world");
             MessageLogWindow.Add("TESTING");
             MessageLogWindow.Add("TESTING");
