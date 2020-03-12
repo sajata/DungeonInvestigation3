@@ -12,8 +12,7 @@ namespace Test_game.Entities
         public int Attack { get; set; } // attack strength i.e how many times it can attack in one go
         public int AttackChance { get; set; } // percent chance of successful hit
         public int Defense { get; set; } // defensive strength i.e how many times it can defend in one go
-        public int DefenseChance { get; set; } // percent chance of successfully blocking a hit
-        public int Gold { get; set; } // amount of gold carried
+        public int DefenseChance { get; set; } // percent chance of successfully blocking a hit        
 
         protected Actor(Color foreground, Color background, int glyph, int width = 1, int length = 1) : base(foreground, background, width, length, glyph)
         {

@@ -46,6 +46,7 @@
     <Compile Include="BSPNode.cs" />
     <Compile Include="CellAutoGenerator.cs" />
     <Compile Include="CommandManager.cs" />
+    <Compile Include="DrunkenWalkGenerator.cs" />
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Monster.cs" />
@@ -61,15 +62,13 @@
     <Compile Include="Menu%27s\MapSelectMenu.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="ListTextBox.cs" />
-    <Compile Include="MessyBSPGenerator.cs" />
-    <Compile Include="MessyBSPNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SavedMapsWindow.cs" />
     <Compile Include="TestMapGenerator.cs" />
     <Compile Include="Tiles\BaseTile.cs" />
     <Compile Include="Tiles\FloorTile.cs" />
     <Compile Include="Tiles\WallTile.cs" />
-    <Compile Include="TunnelingMapGenerator.cs" />
+    <Compile Include="AngbandMapGenerator.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

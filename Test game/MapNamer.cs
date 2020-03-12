@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework;
 
 namespace Test_game
 {
+    /// <summary>
+    /// A console that takes user input and validates it 
+    /// Names the map 
+    /// </summary>
     public class MapNamer : Console
     {
         public ControlsConsole Controls;
@@ -18,8 +22,10 @@ namespace Test_game
             IsFocused = false;
             CreateControls();
 
-            
 
+            //Sets the buttons theme/appearance to the 3D box theme
+            //in my opinion more intuitive than the default
+            //This is for purely aesthetic purposes
             var consoletheme = SadConsole.Themes.Library.Default.Clone();
             consoletheme.ButtonTheme = new SadConsole.Themes.ButtonLinesTheme();
             consoletheme.TextBoxTheme = new SadConsole.Themes.TextBoxTheme();
@@ -29,7 +35,7 @@ namespace Test_game
         }
         private void CreateControls()
         {           
-            
+            //instantiates the controls
             TextBox InputBox = new TextBox(20)
             {
                 Position = new Point(10, 10),
@@ -44,16 +50,22 @@ namespace Test_game
                 Name = "SaveButton"
             };
 
-            //event handlers
+            //event handlers for when the button is pressed
 
+            //executes GameUIManagers.SaveMap function if the 
+            //input in the input box
+            //is valid
             SaveButton.Click += (s, e) =>
             {
                 isValidInput = ValidateInput(ref InputBox);
 
                 if(isValidInput)
                 {
+                    //sets the string in the input box as the map name
                     GameLoop.GameUIManager.MapName = InputBox.EditingText;
+                    //tells GameUiManager to svae the map
                     GameLoop.GameUIManager.SaveMap();
+                    //Quits the game
                     SadConsole.Game.Instance.Exit();
                 }
                 else
@@ -61,18 +73,24 @@ namespace Test_game
                     InputBox.Text = "Invalid Name";
                 }
             };
-
+            //adds the controls to the controls console
             Controls.Add(SaveButton);
             Controls.Add(InputBox);
         }
         
-
+        /// <summary>
+        /// Validates the text input from the text box        
+        /// </summary>
+        /// <param name="InputBox"></param>
+        /// <returns></returns>
         private bool ValidateInput(ref TextBox InputBox)
         {
             bool isValid = false;
             string input = InputBox.EditingText;
-
-            if(input.Length <= 0 || input == " " || input.Length > 20)
+            
+            //VALIDATION : if the input is null or just spaces and its length is too long
+            //its invalid
+            if(string.IsNullOrWhiteSpace(input) || input.Length > 8)
             {
                 isValid = false;
             }

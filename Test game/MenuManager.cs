@@ -6,6 +6,9 @@ using Console = SadConsole.Console;
 using Test_game.Menu_s;
 namespace Test_game
 {
+    /// <summary>
+    /// Contains all the menus before the GameScreen is used
+    /// </summary>
     public class MenuManager : ContainerConsole
     {
         
@@ -27,6 +30,9 @@ namespace Test_game
             //and to actively process it
             Parent = SadConsole.Global.CurrentScreen;
         }
+        /// <summary>
+        /// Creates all the menus
+        /// </summary>
         public void Init()
         {
             CreateMenus();                        
@@ -39,12 +45,13 @@ namespace Test_game
         private void CreateMenus()
         {
             //INDEX OF MENUS
+            //TO BE USED WHEN CHANGING BETWEEN MENUS
             //[0] = > Main Menu
             //[1] = > Map Generator Selection Menu
             //[2] = > Load Map Menu
             //[3] = > Map Preview 
 
-            //
+            
             MainMenu = new MainMenu(GameLoop.GameWidth, GameLoop.GameHeight, 20, 15, Color.Navy, "Main Menu");
             Children.Add(MainMenu);
 

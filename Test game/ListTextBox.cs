@@ -7,8 +7,10 @@ namespace Test_game
 {
     //A scrollable window which displays messsages
     // using a FIFO queue
+    // used for the message log and saved maps window
     public class ListTextBox : Window
     {
+        //max number of lines before the scrollbar is enabled
         private static readonly int _maxLines = 100;
 
         //first line added is the first line removed 
@@ -87,6 +89,7 @@ namespace Test_game
                     // Record how much we've scrolled to enable how far back the bar can see
                     //this is effectively a shortened if else statement
                     _scrollBarCurrentPosition += _messageConsole.TimesShiftedUp != 0 ? _messageConsole.TimesShiftedUp : 1;
+                    
                 }
                 // Determines the scrollbar's max vertical position
                 _messageScrollBar.Maximum = _scrollBarCurrentPosition - _windowBorderThickness;

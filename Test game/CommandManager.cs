@@ -5,6 +5,10 @@ using Test_game.Entities;
 
 namespace Test_game
 {
+    /// <summary>
+    /// Manages commands to the enitites
+    /// Combat and Entity movement
+    /// </summary>
     public class CommandManager
     {
         private Random Dice = new Random(); // this will be the dice used for combat
@@ -137,7 +141,6 @@ namespace Test_game
         //and updates the message log
         private static void ResolveDeath(Actor defender)
         {
-
             GameLoop.GameUIManager.MessageLogWindow.Add($" {defender.Name} was killed.");
             GameLoop.World.CurrentMap.Remove(defender);
             //GameLoop.GameUIManager.Update();

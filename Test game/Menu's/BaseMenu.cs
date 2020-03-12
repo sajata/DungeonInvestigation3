@@ -6,10 +6,14 @@ using Console = SadConsole.Console;
 
 namespace Test_game
 {
-    //Parent class acts as template for each menu with the exception of the GameUIManager
-    //It's also a child of the SadConsole.Console class since each menu is effectively a console
+    /// <summary>
+    // Parent class acts as template for each menu with the exception of the GameUIManager
+    // It's also a child of the SadConsole.Console class since each menu is effectively a console
+    /// </summary>
     public abstract class BaseMenu : Console
     {
+        //this console is designed for storing the controls
+        //stores most of the controls in each menu
         protected ControlsConsole Controls;
 
         public BaseMenu(int width, int height, int controlsConsoleWidth, int controlsConsoleHeight, Color background, string title) : base(width, height) // base parameters means the parameters that have to be passed into the parent class Console
@@ -17,6 +21,7 @@ namespace Test_game
             this.Width = width;
             this.Height = height;
             this.DefaultBackground = background;
+            //sets the console to be invisible by default
             this.IsVisible = false;
             this.IsFocused = false;
 
@@ -39,6 +44,7 @@ namespace Test_game
             consoletheme.TextBoxTheme = new SadConsole.Themes.TextBoxTheme();
             Controls.Theme = consoletheme;
 
+            //creates the controls
             CreateControls();
 
         }
@@ -47,6 +53,7 @@ namespace Test_game
         /// <summary>
         /// This is mainly used to instantiate all of the ui elements and add them to the controls console
         /// as well as their event handlers
+        /// each menu has it's own unique set of controls
         /// </summary>
         public virtual void CreateControls()
         {

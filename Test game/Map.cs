@@ -6,10 +6,15 @@ using Test_game.Entities;
 
 namespace Test_game
 {
+    /// <summary>
+    /// Store all of the map tiles
+    /// Stores the entities on the map and their positions
+    /// Allows entities to be added and removed during the game
+    /// </summary>
     public class Map
     {
         private int _width; // width of map
-        private int _height; // 
+        private int _height; // height of map
        
         BaseTile[] _tiles; // stores all of the tiles on the map
 
@@ -42,7 +47,7 @@ namespace Test_game
             {
                 return false;
             }
-            //then returns wether the tile is walkables
+            //then returns wether the tile is walkable
             //by returning the opposite of what IsBlockingMove returns
             return !_tiles[location.Y * Width + location.X].IsBlockingMove;
         }
@@ -73,6 +78,7 @@ namespace Test_game
         // T stands for the type of object were interested in finding
         // T can be any object that is a child of Entity
         // essentially this this is the same as : "public Player GetPlayerAt (Point location)"
+        // but can also be applied to monsters as well since they are also entities
         public T GetEntityAt<T>(Point location) where T : Entity
         {
             //searches through the multiSpatialMap for object of type T

@@ -6,9 +6,9 @@ namespace Test_game.Tiles
 {
     public class FloorTile : BaseTile
     {
-        //Creates a floor tile
-        //Doesnt block sight or movement
-        public FloorTile(bool blockMovement = false, bool blockSight = false) : base(Color.White, Color.Teal, '.', blockMovement, blockSight)
+        //Floor tile
+        //Doesnt block movement
+        public FloorTile(bool blockMovement = false) : base(Color.White, Color.Teal, '.', blockMovement)
         {
             TileName = "Floor";
         }

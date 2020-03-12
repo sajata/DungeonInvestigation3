@@ -32,13 +32,14 @@ namespace Test_game
             // Start the game.
             SadConsole.Game.Instance.Run();
             SadConsole.Game.Instance.Dispose();
-
+            
             
         }
 
 
         static void Init()
         {                     
+            //excutes constructors
             MenuManager = new MenuManager();
             World = new World();
             GameUIManager = new GameUIManager();

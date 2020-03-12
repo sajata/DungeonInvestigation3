@@ -11,6 +11,11 @@ using Test_game.Entities;
 
 namespace Test_game
 {
+    /// <summary>
+    /// Contains all the consoles for the user to play the game
+    /// checks for input in order to move the character
+    /// cant return to the main menu from this menu
+    /// </summary>
     public class GameUIManager : ContainerConsole
     {
         public ScrollingConsole MapConsole;// contains the console to store the Map data
@@ -20,13 +25,18 @@ namespace Test_game
         private MapNamer MapNamer;
         public string MapName;
         private bool DisableMovement = false;
+
         public void Init()
         {
+            //sets this console 
             IsVisible = true;
             IsFocused = true;
 
+            //tells SadConsole to now only actively render this screen
+            //not the menu manager screen
             Parent = SadConsole.Global.CurrentScreen;
 
+            //creates the message log
             CreateMessageLogWindow(50, GameLoop.GameHeight / 2, "Message Log");
 
             //Loading the World's map into the MapConsole
@@ -36,8 +46,10 @@ namespace Test_game
             CreateMapWindow(60, 30, "Map");
             UseMouse = true;                        
             
+            //creates the controls for this console
             CreateControls();
-
+            //responisble for allowing the user to input the name of the map 
+            //they want to save
             MapNamer = new MapNamer(40, 20);
             MapNamer.Position = new Point(70, 1);
             MapNamer.Parent = this;           
@@ -51,18 +63,22 @@ namespace Test_game
         {
             int ButtonWidth = 12;
             int ButtonHeight = 3;            
-
+           
             Controls = new ControlsConsole(40, 5)
             {
                 Parent = this,
                 Position = new Point(2, (GameLoop.GameHeight+2) / 2)
             };
 
+            //Sets the buttons theme/appearance to the 3D box theme
+            //in my opinion more intuitive than the default
+            //This is for purely aesthetic purposes
             var consoletheme = SadConsole.Themes.Library.Default.Clone();
             consoletheme.ButtonTheme = new SadConsole.Themes.ButtonLinesTheme();
             consoletheme.TextBoxTheme = new SadConsole.Themes.TextBoxTheme();
             Controls.Theme = consoletheme;
 
+            //Instantiates and create the buttons
             Button QuitButton = new Button(ButtonWidth, ButtonHeight)
             {
                 //width 40, height 5
@@ -81,23 +97,31 @@ namespace Test_game
                 Name = "SaveMapButton",
             };
 
+            //adds them to this screens controls console
             Controls.Add(QuitButton);
             Controls.Add(SaveMapButton);
 
+            //event handler for when the buttons are pressed
+            //quits the game
             QuitButton.Click += (s, e) =>
             {
                 SadConsole.Game.Instance.Exit();
             };
-
+            //draws the map namer console
+            //to allow the user to name the map they want to save
+            //saves the map and then quits the game
             SaveMapButton.Click += (s, e) =>
             {
+                //disables keyboard input on all other consoles on this screen
+                //to allow the user to name the map
                 DisableMovement = true;
                 MapWindow.IsFocused = false;
                 MapConsole.IsFocused = false;
                 MapConsole.UseKeyboard = false;
                 MapWindow.UseKeyboard = false;
 
-                
+                //draws the map namer console
+                //and allows keyboard input for it
                 MapNamer.IsVisible = true;
                 MapNamer.IsFocused = true;
                 MapNamer.Controls.IsFocused = true;
@@ -106,23 +130,45 @@ namespace Test_game
             };
 
            
-
+            //adds the controls console to the game screen
             Children.Add(Controls);
         }
 
+        /// <summary>
+        /// Writes the map seed, name and type to their respective text files
+        /// </summary>
         public void SaveMap()
         {
-            GameLoop.sw = File.AppendText("MapSeeds.txt");
-            GameLoop.swMapType = File.AppendText("MapGenTypes.txt");
-            GameLoop.swMapName = File.AppendText("MapNames.txt");
-            
-            GameLoop.sw.WriteLine(GameLoop.World.Seed);
-            GameLoop.swMapType.WriteLine(GameLoop.World.MapGenType);
-            GameLoop.swMapName.WriteLine(MapName);
-            
-            GameLoop.sw.Close();
-            GameLoop.swMapType.Close();
-            GameLoop.swMapName.Close();
+            // Exception handling
+            try
+            {
+                GameLoop.sw = File.AppendText("MapSeeds.txt");
+                GameLoop.swMapType = File.AppendText("MapGenTypes.txt");
+                GameLoop.swMapName = File.AppendText("MapNames.txt");
+
+                GameLoop.sw.WriteLine(GameLoop.World.Seed);
+                GameLoop.swMapType.WriteLine(GameLoop.World.MapGenType);
+                GameLoop.swMapName.WriteLine(MapName);
+
+                GameLoop.sw.Close();
+                GameLoop.swMapType.Close();
+                GameLoop.swMapName.Close();
+            }
+            catch (Exception)
+            {
+                // Proplem with file handling
+
+                MessageLogWindow.Add("ERROR PROCESS ALREADY USING THE TEXT FILES");
+                // make sure all files are closed
+                GameLoop.sw.Close();
+                GameLoop.swMapType.Close();
+                GameLoop.swMapName.Close();
+                GameLoop.sr.Close();
+                GameLoop.srMapType.Close();
+                GameLoop.srMapName.Close();
+                throw;
+            }
+
         }
 
         //Loads the map into the console
@@ -149,10 +195,10 @@ namespace Test_game
                 MapConsole.Children.Add(entity);
             }
 
-            //Subscribe to the Entities ItemAdded listener, so we can keep our MapConsole entities in sync
+            //Subscribe to the Entities ItemAdded listener, to keep MapConsole entities in sync
             map.Entities.ItemAdded += OnMapEntityAdded;
 
-            // Subscribe to the Entities ItemRemoved listener, so we can keep our MapConsole entities in sync
+            // Subscribe to the Entities ItemRemoved listener, to keep MapConsole entities in sync
             map.Entities.ItemRemoved += OnMapEntityRemoved;
 
         }
@@ -184,11 +230,10 @@ namespace Test_game
             MapWindow.Title = title.Align(HorizontalAlignment.Center, mapConsoleWidth);
 
             // add the map viewer to the window
-            //MapWindow.Children.Add(MapConsole);
-
-            // The MapWindow becomes a child console of the UIManager
             MapWindow.Children.Add(MapConsole);
 
+            
+            //Map window becomes child of this screen GameUIManager
             Children.Add(MapWindow);
 
             // Displays the map window on screen
@@ -266,81 +311,37 @@ namespace Test_game
         }
 
         // centers the viewport camera on an Actor
-        public void CenterOnActor(Actor actor)
+        private void CenterOnActor(Actor actor)
         {
             MapConsole.CenterViewPortOnPoint(actor.Position);
         }
 
         // Creates all child consoles to be managed
-        public void CreateConsoles()
+        private void CreateConsoles()
         {
             // Temporarily create a console with *no* tile data that will later be replaced with map data
             MapConsole = new ScrollingConsole(GameLoop.GameWidth, GameLoop.GameHeight);
         }
 
-        public void CreateMessageLogWindow(int width, int height, string title)
+        private void CreateMessageLogWindow(int width, int height, string title)
         {
             //Initialising MessageLog
             MessageLogWindow = new ListTextBox(width, height, title);
             Children.Add(MessageLogWindow);
             MessageLogWindow.Show();
             MessageLogWindow.Position = new Point(GameLoop.GameWidth - width, GameLoop.GameHeight / 2);
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("Hello world");
-            MessageLogWindow.Add("TESTING");
-            MessageLogWindow.Add("TESTING");
+            
         }
 
-        //THESE ARE THE LISTENERS
+        //THESE ARE THE LISTENER/EVENT HANDLERS
         // Add an Entity to the MapConsole every time the Map's Entity collection changes
-        public void OnMapEntityAdded(object sender, GoRogue.ItemEventArgs<Entity> args)
+        private void OnMapEntityAdded(object sender, GoRogue.ItemEventArgs<Entity> args)
         {
             MapConsole.Children.Add(args.Item);
         }
 
         // Remove an Entity from the MapConsole every time the Map's entity collection changes
-        public void OnMapEntityRemoved(object sender, GoRogue.ItemEventArgs<Entity> args)
+        private void OnMapEntityRemoved(object sender, GoRogue.ItemEventArgs<Entity> args)
         {
             MapConsole.Children.Remove(args.Item);
         }
