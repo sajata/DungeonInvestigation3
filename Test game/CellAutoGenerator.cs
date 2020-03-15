@@ -26,7 +26,7 @@ namespace Test_game
         private const int _numberOfGenerations = 7;
 
         //probability a cells starts alive in the initial state of the automation
-        private const int _percentWalls = 48;
+        private const int _percentWalls = 52;
 
         //threshold number of cells required for a cell to stay alive
         private const int _deathLimit = 4;
@@ -103,7 +103,7 @@ namespace Test_game
             //according to the probility of the cell being initially alive (_percentWalls)
             for(int i =0; i < _map.Tiles.Length; i++)
             {
-                if(r.Next(1,101) < _percentWalls)
+                if(r.Next(1,101) > _percentWalls)
                 {
                     _map.Tiles[i] = new WallTile();
                 }

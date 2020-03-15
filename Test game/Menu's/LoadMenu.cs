@@ -109,17 +109,17 @@ namespace Test_game.Menu_s
             //Each map's properties are indexed on the same line in the text files
             //eg if the map seed is on the 2nd line
             //that maps name and type are on the 2nd line of their respective text files
-            GameLoop.sr = new StreamReader("MapSeeds.txt");
+            GameLoop.srMapSeed = new StreamReader("MapSeeds.txt");
             GameLoop.srMapType = new StreamReader("MapGenTypes.txt");
             GameLoop.srMapName = new StreamReader("MapNames.txt");
-            while (GameLoop.sr.EndOfStream == false && GameLoop.srMapType.EndOfStream == false && GameLoop.srMapName.EndOfStream == false)
+            while (GameLoop.srMapSeed.EndOfStream == false && GameLoop.srMapType.EndOfStream == false && GameLoop.srMapName.EndOfStream == false)
             {
                 message = "Map Name: " + GameLoop.srMapName.ReadLine(); 
-                message += " | Map Seed: " + GameLoop.sr.ReadLine();
+                message += " | Map Seed: " + GameLoop.srMapSeed.ReadLine();
                 message += " | Map Type: " + GameLoop.srMapType.ReadLine();
                 SavedMaps.Add(message);
             }
-            GameLoop.sr.Close();
+            GameLoop.srMapSeed.Close();
             GameLoop.srMapType.Close();
             GameLoop.srMapName.Close();           
         }
@@ -154,7 +154,7 @@ namespace Test_game.Menu_s
         {
             bool isValid = false;                        
             int CurrentLine = 0;
-            GameLoop.sr = new StreamReader("MapSeeds.txt");
+            GameLoop.srMapSeed = new StreamReader("MapSeeds.txt");
 
             //VALIDATION to check if the input is null or non numeric
             //returns false if its null or non-numeric
@@ -168,9 +168,9 @@ namespace Test_game.Menu_s
 
             //VALIDATION to check if the seed exists in the MapSeeds.txt file
             //Keep looping until the end of the text file or when the seed is found
-            while (GameLoop.sr.EndOfStream == false && isValid == false && TextInput.EditingText != null)
+            while (GameLoop.srMapSeed.EndOfStream == false && isValid == false && TextInput.EditingText != null)
             {                
-                CurrentLine = int.Parse(GameLoop.sr.ReadLine());
+                CurrentLine = int.Parse(GameLoop.srMapSeed.ReadLine());
                 //if the inputseed matches the one on the current line
                 //set isValid to true
                 if (InputSeed == CurrentLine)
@@ -182,7 +182,7 @@ namespace Test_game.Menu_s
                 //since they are all indexed on the same line
                 index++;
             }
-            GameLoop.sr.Close();
+            GameLoop.srMapSeed.Close();
             return isValid;
         }
     }

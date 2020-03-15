@@ -22,6 +22,9 @@ namespace Test_game
         //test map generator for the exception handler
         private TestMapGenerator failSafe = new TestMapGenerator();
 
+        //Root node which represents the entire dungeon
+        private BSPNode Root;
+
         public int Seed { get => _seed; set => _seed = value; }
 
         public Map GenerateMap(int mapWidth, int mapHeight, int maxRooms, int minRoomSize, int maxRoomSize)
@@ -44,7 +47,7 @@ namespace Test_game
             
             //creates the root node which contains the entire map
             //slightly smaller than the entire map to allow for a border of walls aroundthe dungeon
-            BSPNode Root = new BSPNode(new Rectangle(0, 0, mapWidth - 1, mapHeight - 1));
+            Root = new BSPNode(new Rectangle(0, 0, mapWidth - 1, mapHeight - 1));
              
             //creates an empty map of size (mapWidth x mapHeight)
             _map = new Map(mapWidth, mapHeight);
@@ -54,7 +57,7 @@ namespace Test_game
             //This is a dungeon, so start by filling the enitre map with walls
             FloodWalls();
 
-            //Since this is a recursive function 
+            //Since this is a recursive function  
             //Exception handling for stack overflow
             try
             {

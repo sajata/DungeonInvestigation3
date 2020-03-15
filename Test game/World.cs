@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using Console = SadConsole.Console;
@@ -21,6 +22,9 @@ namespace Test_game
         private int _seed;
         private int _numMonsters = 10;
 
+
+        //stores all the monsters used in the game
+        private List<Monster> _monsters;
         //random number generator for the player and monsters postions        
         private Random rndNum = new Random();
         //Acts as validation if an invalid map generation type 
@@ -31,7 +35,8 @@ namespace Test_game
         //Player data
         public Player Player { get; set; }
 
-       
+        //acts as a temporary monster which stores the monster as its being generated
+        private Monster _tempMonster;
 
         //Interface for the type of map generated
         public string MapGenType { get => _mapGenType; set => _mapGenType = value; }
@@ -185,7 +190,8 @@ namespace Test_game
         {         
             //stores 
             int monsterPosition = 0;
-           
+
+            _monsters = new List<Monster>();
 
             //Create multiple monsters
             //and pick a random postion on the map to place them
@@ -193,22 +199,52 @@ namespace Test_game
             //if not try again
             for (int i = 0; i < _numMonsters; i++)
             {
+                bool isCollidingWithEnitity = true;
                 //instantiates a monster
-                Monster newMonster = new Monster(Color.Orange, Color.Transparent);
-                newMonster.Components.Add(new EntityViewSyncComponent());//Allows the monster to appear on the scrolling console
-                newMonster.Position = new Point(0, 0);
+                Monster _tempMonster = new Monster(Color.Orange, Color.Transparent);
+                _tempMonster.Components.Add(new EntityViewSyncComponent());//Allows the monster to appear on the scrolling console
+                _tempMonster.Position = new Point(0, 0);
                 monsterPosition = 0;
 
-                while (CurrentMap.Tiles[monsterPosition].IsBlockingMove)
+
+                while (CurrentMap.Tiles[monsterPosition].IsBlockingMove || isCollidingWithEnitity)
                 {
                     // pick a random position on the map
                     monsterPosition = rndNum.Next(0, CurrentMap.Width * CurrentMap.Height);
+                    // Set the monster's new position
+                    _tempMonster.Position = new Point(monsterPosition % CurrentMap.Width, monsterPosition / CurrentMap.Width);
+                    //checks whether postion isn't occupied by another entity
+                    isCollidingWithEnitity = CheckNewMonsterCollision(_tempMonster);
                 }
               
                 // Set the monster's new position
-                newMonster.Position = new Point(monsterPosition % CurrentMap.Width, monsterPosition / CurrentMap.Width);
-                CurrentMap.Add(newMonster);
+                _tempMonster.Position = new Point(monsterPosition % CurrentMap.Width, monsterPosition / CurrentMap.Width);
+                //Adds the monster to the map
+                CurrentMap.Add(_tempMonster);
+                _monsters.Add(_tempMonster);
             }
+        }
+        /// <summary>
+        /// Checks whther the newly generated monsters position collides with any other existing entity
+        /// </summary>
+        private bool CheckNewMonsterCollision(Monster Monster)
+        {
+            //if position of the new monster is the same as that of the generated player
+            if(Monster.Position == Player.Position)
+            {
+                return true;
+            }
+            // if position of the new monster is the same as that of an existing monster
+            foreach(Monster monster in _monsters)
+            {
+                if(Monster.Position == monster.Position)
+                {
+                    return true;
+                }
+            }
+
+            //if new monster isn't generated in a position of an existing enity
+            return false;
         }
     }
 }

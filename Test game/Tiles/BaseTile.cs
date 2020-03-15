@@ -9,10 +9,10 @@ namespace Test_game.Tiles
     /// </summary>
     public abstract class BaseTile : SadConsole.Cell
     {
-        //Bools accounting for tiles sight
+        //Bools accounting for tiles 
         //and movement allowance
         public bool IsBlockingMove;
-        public bool IsBlockingSight;
+        
         //Tiles Name
         protected string TileName;
 

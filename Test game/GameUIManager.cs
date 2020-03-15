@@ -18,13 +18,16 @@ namespace Test_game
     /// </summary>
     public class GameUIManager : ContainerConsole
     {
+        private string _mapName; // stores the name the user chooses for their map if they save it
         public ScrollingConsole MapConsole;// contains the console to store the Map data
         public Window MapWindow; // window to contain the MapConsole which contains the game map
         public ListTextBox MessageLogWindow;
         public ControlsConsole Controls;
         private MapNamer MapNamer;
-        public string MapName;
+        
         private bool DisableMovement = false;
+
+        public string MapName { get => _mapName; set => _mapName = value; }
 
         public void Init()
         {
@@ -142,15 +145,15 @@ namespace Test_game
             // Exception handling
             try
             {
-                GameLoop.sw = File.AppendText("MapSeeds.txt");
+                GameLoop.swMapSeed = File.AppendText("MapSeeds.txt");
                 GameLoop.swMapType = File.AppendText("MapGenTypes.txt");
                 GameLoop.swMapName = File.AppendText("MapNames.txt");
 
-                GameLoop.sw.WriteLine(GameLoop.World.Seed);
+                GameLoop.swMapSeed.WriteLine(GameLoop.World.Seed);
                 GameLoop.swMapType.WriteLine(GameLoop.World.MapGenType);
                 GameLoop.swMapName.WriteLine(MapName);
 
-                GameLoop.sw.Close();
+                GameLoop.swMapSeed.Close();
                 GameLoop.swMapType.Close();
                 GameLoop.swMapName.Close();
             }
@@ -160,10 +163,10 @@ namespace Test_game
 
                 MessageLogWindow.Add("ERROR PROCESS ALREADY USING THE TEXT FILES");
                 // make sure all files are closed
-                GameLoop.sw.Close();
+                GameLoop.swMapSeed.Close();
                 GameLoop.swMapType.Close();
                 GameLoop.swMapName.Close();
-                GameLoop.sr.Close();
+                GameLoop.srMapSeed.Close();
                 GameLoop.srMapType.Close();
                 GameLoop.srMapName.Close();
                 throw;

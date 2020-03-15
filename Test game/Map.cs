@@ -15,13 +15,13 @@ namespace Test_game
     {
         private int _width; // width of map
         private int _height; // height of map
-       
+
         BaseTile[] _tiles; // stores all of the tiles on the map
 
         public BaseTile[] Tiles { get { return _tiles; } set { _tiles = value; } }
         public int Width { get { return _width; } set { _width = value; } }
         public int Height { get { return _height; } set { _height = value; } }
-        
+
         //MultiSpatial map in this case stores all the entities on the map
         //And allows for entities to be on the same postion on the map
         public GoRogue.MultiSpatialMap<Entity> Entities = new GoRogue.MultiSpatialMap<Entity>(); // Keeps track of all entities on the map

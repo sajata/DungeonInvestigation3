@@ -15,10 +15,10 @@ namespace Test_game
         public static GameUIManager GameUIManager; // manages Game UI when user is playing the map
         public static CommandManager CommandManager; // manages commands during the game state
         public static MenuManager MenuManager; // this class contains all of the menus 
-        public static StreamReader sr; // responsible for reading in mapseeds from MapSeeds.txt
+        public static StreamReader srMapSeed; // responsible for reading in mapseeds from MapSeeds.txt
         public static StreamReader srMapType; // responsible for reading in map types from MapTypes.txt
         public static StreamReader srMapName; // responsible for reading in map names from MapNames.txt
-        public static StreamWriter sw;// responsible for writing to MapSeeds.txt
+        public static StreamWriter swMapSeed;// responsible for writing to MapSeeds.txt
         public static StreamWriter swMapType; // responsible for writing to MapTypes.txt
         public static StreamWriter swMapName; // responsible for writing to MapNames.txt
         static void Main()

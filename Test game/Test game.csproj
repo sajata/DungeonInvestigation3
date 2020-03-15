@@ -63,7 +63,6 @@
     <Compile Include="MenuManager.cs" />
     <Compile Include="ListTextBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SavedMapsWindow.cs" />
     <Compile Include="TestMapGenerator.cs" />
     <Compile Include="Tiles\BaseTile.cs" />
     <Compile Include="Tiles\FloorTile.cs" />
